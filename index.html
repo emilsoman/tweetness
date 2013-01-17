@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Tweetness by emilsoman</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/emilsoman/tweetness">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/emilsoman/tweetness/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/emilsoman/tweetness/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Tweetness</h1>
+          <p>Tweetness parses live tweet stream from Twitter and finds the top 10 hashtags using Storm (using RedStorm for Ruby)</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/emilsoman">emilsoman</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>Tweetness</h1>
+
+<p>Tweetness, a POC made around Storm and Twitter. It counts the popular hashtags in realtime using <a href="https://github.com/colinsurprenant/redstorm">RedStorm</a>/<a href="https://github.com/nathanmarz/storm">Storm</a>.</p>
+
+<p>Resources :</p>
+
+<ul>
+<li>
+<a href="http://www.slideshare.net/colinsurprenant/twitter-big-data">slideshare presentation</a> about Twitter Big Data and Tweetness.</li>
+<li>A sample RedStorm topology <a href="http://tweitgeist.colinsurprenant.com/">http://tweitgeist.colinsurprenant.com/</a>
+</li>
+<li><a href="https://github.com/colinsurprenant/redstorm">Redstorm</a></li>
+</ul><p>There are three components that you need to run:</p>
+
+<ul>
+<li>The Twitter Reader which uses <code>twitter-stream</code> gem to read tweets from the Twitter streaming API and pushes tweets to Redis</li>
+<li>The storm topology run using JRuby which picks tweets from Redis, executes the counting algorithm in parallel, and pushes the top 10 ranks back to Redis</li>
+<li>The UI which is a Sinatra app which reads the ranks from Redis and displays it on the browser.</li>
+</ul><h2>Installation</h2>
+
+<ul>
+<li>
+<a href="http://redis.io/">Redis</a> is required</li>
+<li>
+<a href="http://rvm.io/">RVM</a> for switching to JRuby for starting the RedStorm topology</li>
+</ul><p>The required gems for the three components are installed based on the platform which runs <code>bundle install</code>. Read the
+<code>Gemfile</code> to see how it works.</p>
+
+<h3>Redstorm backend</h3>
+
+<ul>
+<li><p>requires JRuby 1.6.x</p></li>
+<li>
+<p>set JRuby in 1.9 mode. Run this in the shell :</p>
+
+<div class="highlight"><pre><span class="nb">export </span><span class="nv">JRUBY_OPTS</span><span class="o">=</span>--1.9
+</pre></div>
+</li>
+<li>
+<p>install the RedStorm gem using bundler with the supplied Gemfile.</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>bundle install
+</pre></div>
+</li>
+<li>
+<p>run RedStorm installation</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>bundle <span class="nb">exec </span>redstorm install
+</pre></div>
+</li>
+<li>
+<p>package the topology required gems</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>bundle <span class="nb">exec </span>redstorm bundle topology
+</pre></div>
+</li>
+<li>
+<p>if you plan on running the topology on a cluster, package the topology jar</p>
+
+<div class="highlight"><pre>bundle <span class="nb">exec </span>redstorm jar lib/tweetness/
+</pre></div>
+</li>
+</ul><p>-To run the topology locally, run:</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>bundle <span class="nb">exec </span>redstorm <span class="nb">local </span>lib/tweetness/storm/tweetness_topology.rb
+</pre></div>
+
+<h3>Twitter Reader</h3>
+
+<ul>
+<li><p>requires Ruby 1.9.x</p></li>
+<li>
+<p>install required gems using bundler with the supplied Gemfile</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>bundle install
+</pre></div>
+</li>
+<li><p>edit <code>config/twitter_reader.rb</code> to add your credentials</p></li>
+</ul><div class="highlight"><pre><span class="nv">$ </span>ruby lib/tweetness/twitter/twitter_reader.rb
+</pre></div>
+
+<h3>Viewer</h3>
+
+<p>If you ran <code>bundle install</code> for the Twitter Reader component, there's nothing to do here.
+It would install sinatra.</p>
+
+<p>Run the sinatra app and point your browser at localhost:9292</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>rackup lib/web/config.ru
+</pre></div>
+
+<h2>Usage</h2>
+
+<ul>
+<li>Redis should be up and running on localhost</li>
+<li>All three components should be running concurrently if you want to see the output on the webpage .</li>
+</ul>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
