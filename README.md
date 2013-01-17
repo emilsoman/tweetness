@@ -5,7 +5,7 @@ Tweetness, a POC made around Storm and Twitter. It counts the popular hashtags i
 Resources :
 
 - [slideshare presentation](http://www.slideshare.net/colinsurprenant/twitter-big-data) about Twitter Big Data and Tweetness.
-- Tweitgeist [http://tweitgeist.colinsurprenant.com/](http://tweitgeist.colinsurprenant.com/)
+- A sample RedStorm topology [http://tweitgeist.colinsurprenant.com/](http://tweitgeist.colinsurprenant.com/)
 - [Redstorm](https://github.com/colinsurprenant/redstorm)
 
 There are three components that you need to run:
