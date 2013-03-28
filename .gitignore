@@ -1,7 +1,6 @@
 target/
 examples/
 .rvmrc
-storm
 ivy
 .bundle
 Gemfile.lock
